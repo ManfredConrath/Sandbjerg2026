@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sandbjergkonferencen 2026 – Filmstoryboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap');
+
+  :root {
+    --navy:  #1B2B4B;
+    --gold:  #B99433;
+    --cream: #F5F0E8;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #0f1923;
+    color: var(--cream);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--navy);
+    border-bottom: 3px solid var(--gold);
+    padding: 2rem 3rem;
+  }
+  header h1 { font-family: 'Lora', serif; font-size: 1.8rem; color: var(--white); }
+  header p  { color: var(--cream); font-size: 0.95rem; margin-top: 0.4rem; opacity: 0.8; }
+
+  .layout { display: grid; grid-template-columns: 420px 1fr; gap: 0; min-height: calc(100vh - 120px); }
+
+  /* ── PREVIEW PANEL ── */
+  .preview-panel {
+    background: #000;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    border-right: 2px solid #2a3d5f;
+  }
+
+  .film-frame {
+    width: 360px;
+    height: 640px;
+    background: var(--navy);
+    border: 2px solid #2a3d5f;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .film-frame .bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(26,42,75,0.5) 0%, rgba(26,42,75,0.92) 100%);
+    z-index: 1;
+  }
+
+  .film-frame .bg-img {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://sandbjergkonferencen.dk/wp-content/uploads/2024/11/cropped-cropped-cropped-Sandbjerg-gods-stjm-billede-1.png');
+    background-size: cover;
+    background-position: center 30%;
+    z-index: 0;
+    filter: brightness(0.7);
+  }
+
+  .frame-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .frame-content.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .frame-gold-line {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 1rem auto;
+  }
+
+  .frame-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+
+  .frame-main {
+    font-family: 'Lora', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+
+  .frame-sub {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 300;
+    color: var(--cream);
+    opacity: 0.85;
+    line-height: 1.6;
+  }
+
+  .frame-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 0.4rem 1.2rem;
+    margin-top: 1rem;
+  }
+
+  .frame-keywords {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    line-height: 2;
+  }
+
+  /* Timecode bar */
+  .timecode-bar {
+    width: 360px;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .timecode-track {
+    flex: 1;
+    height: 4px;
+    background: #2a3d5f;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .timecode-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .timecode-label {
+    font-size: 0.7rem;
+    color: var(--gold);
+    font-family: monospace;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  /* ── STORYBOARD PANEL ── */
+  .storyboard-panel {
+    padding: 2.5rem 3rem;
+    overflow-y: auto;
+  }
+
+  .storyboard-panel h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+  }
+
+  .storyboard-panel > p {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #2a3d5f;
+    padding-bottom: 1rem;
+  }
+
+  .scene-card {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #2a3d5f;
+    border-left: 4px solid #2a3d5f;
+    border-radius: 4px;
+    background: #111c2b;
+    cursor: pointer;
+    transition: border-left-color 0.2s, background 0.2s;
+  }
+
+  .scene-card:hover,
+  .scene-card.active {
+    border-left-color: var(--gold);
+    background: #162338;
+  }
+
+  .scene-num {
+    font-family: monospace;
+    font-size: 0.7rem;
+    color: var(--gold);
+    opacity: 0.7;
+    min-width: 50px;
+    padding-top: 2px;
+  }
+
+  .scene-body h3 {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    color: var(--white);
+    margin-bottom: 0.4rem;
+  }
+
+  .scene-body .scene-desc {
+    font-size: 0.82rem;
+    opacity: 0.75;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .scene-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-size: 0.68rem;
+    padding: 0.15rem 0.6rem;
+    border-radius: 2px;
+    border: 1px solid;
+  }
+  .tag-anim  { border-color: #4a6fa5; color: #7fa8d8; }
+  .tag-audio { border-color: #5a7a3a; color: #8ab86a; }
+  .tag-visual{ border-color: #7a4a2a; color: #c8824a; }
+
+  /* Script section */
+  .script-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: #111c2b;
+    border: 1px solid #2a3d5f;
+    border-radius: 4px;
+  }
+
+  .script-section h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.2rem;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #2a3d5f;
+  }
+
+  .script-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  .script-table th {
+    text-align: left;
+    padding: 0.6rem 1rem;
+    background: #162338;
+    color: var(--gold);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .script-table td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #1e2f48;
+    vertical-align: top;
+    line-height: 1.5;
+    color: var(--cream);
+  }
+
+  .script-table td:first-child {
+    font-family: monospace;
+    color: var(--gold);
+    opacity: 0.8;
+    white-space: nowrap;
+  }
+
+  .script-table td:nth-child(2) {
+    font-family: 'Lora', serif;
+    font-size: 0.9rem;
+    color: var(--white);
+  }
+
+  .tech-note {
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+    background: #0f1923;
+    border: 1px solid #2a3d5f;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    line-height: 1.8;
+  }
+
+  .tech-note h3 {
+    font-family: 'Lora', serif;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+
+  .tech-note ul { padding-left: 1.2rem; }
+  .tech-note li { margin-bottom: 0.4rem; opacity: 0.85; }
+  .tech-note strong { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Sandbjergkonferencen 2026 – Filmstoryboard</h1>
+  <p>Niveau 3 · 20–25 sekunders teaserfilm · Klik på en scene for forhåndsvisning</p>
+</header>
+
+<div class="layout">
+
+  <!-- PREVIEW -->
+  <div class="preview-panel">
+    <div class="film-frame" id="filmFrame">
+      <div class="bg-img"></div>
+      <div class="bg-overlay"></div>
+      <div class="frame-content" id="frameContent">
+        <div class="frame-label">Klik en scene</div>
+        <div class="frame-gold-line"></div>
+        <div class="frame-main">Sandbjergkonferencen 2026</div>
+        <div class="frame-sub">Vælg en scene til højre for forhåndsvisning</div>
+      </div>
+    </div>
+    <div class="timecode-bar">
+      <span class="timecode-label" id="tcLabel">0:00</span>
+      <div class="timecode-track">
+        <div class="timecode-fill" id="tcFill" style="width:0%"></div>
+      </div>
+      <span class="timecode-label">0:25</span>
+    </div>
+  </div>
+
+  <!-- STORYBOARD -->
+  <div class="storyboard-panel">
+
+    <h2>Scener</h2>
+    <p>Teaserfilm til sociale medier · 1080 × 1920 px (9:16) · 20–25 sekunder · Ingen AI-genererede ansigter</p>
+
+    <div class="scene-card" onclick="showScene(0)" id="sc0">
+      <div class="scene-num">0–4 s<br><br>#1</div>
+      <div class="scene-body">
+        <h3>Åbning – Logo og arrangør</h3>
+        <div class="scene-desc">Sandbjerg Gods vises i blød fade-in. Logo popper ind fra toppen med fade. Arrangørens navn fader ind under logoet.</div>
+        <div class="scene-tags">
+          <span class="tag tag-anim">Logo fade-in</span>
+          <span class="tag tag-visual">Sandbjerg Gods baggrund</span>
+          <span class="tag tag-audio">Musik ind (diskret)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scene-card" onclick="showScene(1)" id="sc1">
+      <div class="scene-num">4–8 s<br><br>#2</div>
+      <div class="scene-body">
+        <h3>Konferencens titel</h3>
+        <div class="scene-desc">Guldlinje trækker ind fra venstre. "Sandbjergkonferencen 2026" fader ind med elegant serif-typografi. Stor, klar, centreret.</div>
+        <div class="scene-tags">
+          <span class="tag tag-anim">Linje-animation venstre→højre</span>
+          <span class="tag tag-anim">Tekst fade-in</span>
+          <span class="tag tag-visual">Stil: Rolig, klassisk</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scene-card" onclick="showScene(2)" id="sc2">
+      <div class="scene-num">8–12 s<br><br>#3</div>
+      <div class="scene-body">
+        <h3>Tema</h3>
+        <div class="scene-desc">Tidligere tekst fader ud. "Det formidlende skolebibliotek" glider ind oppefra. Undertitlen "Skolebibliotek som formidler" fader ind derunder.</div>
+        <div class="scene-tags">
+          <span class="tag tag-anim">Slide-in ovenfra</span>
+          <span class="tag tag-anim">Undertitel fade</span>
+          <span class="tag tag-audio">Musik: let swell</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scene-card" onclick="showScene(3)" id="sc3">
+      <div class="scene-num">12–18 s<br><br>#4</div>
+      <div class="scene-body">
+        <h3>Programord – Nøgleord fader ind</h3>
+        <div class="scene-desc">Fem ord/fraser vises ét ad gangen med kort pause imellem, centreret med let guld-farve. Hvert ord fader ind og ud som ét åndedrag.</div>
+        <div class="scene-tags">
+          <span class="tag tag-anim">Sekventiel ord-animation</span>
+          <span class="tag tag-visual">Guld · Hvid skift</span>
+          <span class="tag tag-audio">Musik: uændret</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scene-card" onclick="showScene(4)" id="sc4">
+      <div class="scene-num">18–22 s<br><br>#5</div>
+      <div class="scene-body">
+        <h3>Dato og sted</h3>
+        <div class="scene-desc">Dato og sted vises tydeligt centreret. "12.–13. november 2026" og "Sandbjerg Gods" fader ind over et let mørknet billede af godset.</div>
+        <div class="scene-tags">
+          <span class="tag tag-anim">Tekst fade-in</span>
+          <span class="tag tag-visual">Guldlinje under dato</span>
+          <span class="tag tag-audio">Musik: dæmper let ned</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scene-card" onclick="showScene(5)" id="sc5">
+      <div class="scene-num">22–25 s<br><br>#6</div>
+      <div class="scene-body">
+        <h3>Call to action – Afslutning</h3>
+        <div class="scene-desc">Guld-badge med "Tilmelding er åben" fader ind. URL vises diskret. Logo vises igen øverst. Hold på 2 sekunder – derefter fade to black.</div>
+        <div class="scene-tags">
+          <span class="tag tag-anim">Badge pop-in</span>
+          <span class="tag tag-anim">Fade to black</span>
+          <span class="tag tag-audio">Musik: fade out</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPT TABLE -->
+    <div class="script-section">
+      <h2>Komplet filmscript med timecodes</h2>
+      <table class="script-table">
+        <thead>
+          <tr>
+            <th>Tid</th>
+            <th>Tekst på skærm</th>
+            <th>Visuel beskrivelse</th>
+            <th>Lyd</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0–4 s</td>
+            <td>Skolebiblioteksforeningen<br>Lokalafdeling Sønderjylland<br><em>(+ logo)</em></td>
+            <td>Fade-in af Sandbjerg Gods. Logo glider ind oppefra. Arrangørnavn fader ind.</td>
+            <td>Musik ind – stille, klassisk</td>
+          </tr>
+          <tr>
+            <td>4–8 s</td>
+            <td>Sandbjergkonferencen 2026</td>
+            <td>Guldlinje trækker ind fra venstre. Konferencenavnet fader ind, stort og centreret.</td>
+            <td>Musik: rolig</td>
+          </tr>
+          <tr>
+            <td>8–12 s</td>
+            <td>Det formidlende skolebibliotek<br><small>Skolebibliotek som formidler</small></td>
+            <td>Tidligere tekst fader ud. Tema-titel glider ned oppefra. Undertitel fader ind.</td>
+            <td>Musik: let swell</td>
+          </tr>
+          <tr>
+            <td>12–18 s</td>
+            <td>Fagplaner · Læselyst<br>Teknologiforståelse<br>Aktiv lytning · Skærmbrug</td>
+            <td>Hvert nøgleord fader sekventielt ind og ud – ét ad gangen, guld/hvid skift.</td>
+            <td>Musik: uændret</td>
+          </tr>
+          <tr>
+            <td>18–22 s</td>
+            <td>12.–13. november 2026<br>Sandbjerg Gods</td>
+            <td>Dato og sted centreret. Guldlinje under. Godset synligt i baggrunden.</td>
+            <td>Musik: dæmper diskret</td>
+          </tr>
+          <tr>
+            <td>22–25 s</td>
+            <td>Tilmelding er åben<br><small>sandbjergkonferencen.dk/tilmelding</small></td>
+            <td>Guld-badge glider ind. URL vises. Logo gentages. Fade to black.</td>
+            <td>Musik: fade out</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TECH NOTES -->
+    <div class="tech-note">
+      <h3>Tekniske specifikationer og produktionsvejledning</h3>
+      <ul>
+        <li><strong>Format:</strong> 1080 × 1920 px (9:16), 25 fps – egnet til Instagram Reels, Facebook Stories, YouTube Shorts</li>
+        <li><strong>Varighed:</strong> 22–25 sekunder inkl. fade in/out</li>
+        <li><strong>Baggrundsbillede:</strong> Sandbjerg Gods – brug billedet fra konferencens hjemmeside. Opskalér med AI-tool (Topaz Gigapixel, Lightroom Super Resolution, eller gratis alternativ img.upscaler.com) inden brug for at opnå skarp 1080×1920.</li>
+        <li><strong>Typografi:</strong> Lora (serif) til headline – download gratis fra Google Fonts. Poppins Light til brødtekst.</li>
+        <li><strong>Farvepalet:</strong> Navy #1B2B4B · Guld #B99433 · Off-white #F5F0E8</li>
+        <li><strong>Animationsværktøjer:</strong> Adobe Premiere / After Effects, CapCut (gratis), Canva Pro eller DaVinci Resolve (gratis). Alle kan håndtere enkle tekstanimationer.</li>
+        <li><strong>Musik:</strong> Vælg royalty-free klassisk/ambient fra Pixabay.com eller Epidemicsound.com. Søg "classical ambient library" eller "soft piano". Max 25 sek. – fade out de sidste 3 sekunder.</li>
+        <li><strong>AI-assistance:</strong> Brug AI kun til tekstopstilling og opskalering af baggrundsbilledet. Ingen AI-genererede ansigter eller scener.</li>
+        <li><strong>Undertekster:</strong> Tilføj undertekster/captions i videoredigeringsappen – mange seere ser videoer uden lyd på sociale medier.</li>
+        <li><strong>Eksport:</strong> H.264, høj kvalitet (bitrate min. 5 Mbps), .mp4 format. Instagram/Facebook accepterer op til 4 GB.</li>
+      </ul>
+    </div>
+
+  </div><!-- /storyboard-panel -->
+</div><!-- /layout -->
+
+<script>
+const scenes = [
+  {
+    tc: "0:00–0:04", pct: 8,
+    label: "Scene 1 / 6",
+    main: "Skolebiblioteksforeningen\nLokalafdeling Sønderjylland",
+    sub: "inviterer til konference på Sandbjerg Gods",
+    badge: null, keywords: null
+  },
+  {
+    tc: "0:04–0:08", pct: 24,
+    label: "Scene 2 / 6",
+    main: "Sandbjergkonferencen\n2026",
+    sub: null, badge: null, keywords: null
+  },
+  {
+    tc: "0:08–0:12", pct: 44,
+    label: "Scene 3 / 6",
+    main: "Det formidlende\nskolebibliotek",
+    sub: "Skolebibliotek som formidler",
+    badge: null, keywords: null
+  },
+  {
+    tc: "0:12–0:18", pct: 64,
+    label: "Scene 4 / 6",
+    main: null, sub: null, badge: null,
+    keywords: ["Fagplaner", "Læselyst", "Teknologiforståelse", "Aktiv lytning", "Skærmbrug"]
+  },
+  {
+    tc: "0:18–0:22", pct: 80,
+    label: "Scene 5 / 6",
+    main: "12.–13. november 2026",
+    sub: "Sandbjerg Gods",
+    badge: null, keywords: null
+  },
+  {
+    tc: "0:22–0:25", pct: 100,
+    label: "Scene 6 / 6",
+    main: "Tilmelding er åben",
+    sub: "sandbjergkonferencen.dk/tilmelding",
+    badge: "Tilmeld dig nu", keywords: null
+  }
+];
+
+let kwInterval = null;
+
+function showScene(idx) {
+  // Clear any running keyword animation
+  if (kwInterval) { clearInterval(kwInterval); kwInterval = null; }
+
+  // Update active state on cards
+  document.querySelectorAll('.scene-card').forEach((c, i) => {
+    c.classList.toggle('active', i === idx);
+  });
+
+  const s = scenes[idx];
+  const fc = document.getElementById('frameContent');
+
+  // Timecode
+  document.getElementById('tcLabel').textContent = s.tc.split('–')[0];
+  document.getElementById('tcFill').style.width = s.pct + '%';
+
+  // Animate out
+  fc.classList.remove('visible');
+
+  setTimeout(() => {
+    let html = `<div class="frame-label">${s.label} · ${s.tc}</div><div class="frame-gold-line"></div>`;
+
+    if (s.keywords) {
+      html += `<div class="frame-keywords" id="kwBox">Fagplaner</div>`;
+      fc.innerHTML = html;
+      fc.classList.add('visible');
+      // Cycle keywords
+      let ki = 0;
+      const kwBox = document.getElementById('kwBox');
+      kwInterval = setInterval(() => {
+        ki = (ki + 1) % s.keywords.length;
+        kwBox.style.opacity = 0;
+        setTimeout(() => {
+          kwBox.textContent = s.keywords[ki];
+          kwBox.style.transition = 'opacity 0.4s';
+          kwBox.style.opacity = 1;
+        }, 300);
+      }, 900);
+      return;
+    }
+
+    if (s.main) {
+      html += `<div class="frame-main">${s.main.replace(/\n/g,'<br>')}</div>`;
+    }
+    if (s.sub) {
+      html += `<div class="frame-sub">${s.sub}</div>`;
+    }
+    if (s.badge) {
+      html += `<div class="frame-badge">${s.badge}</div>`;
+    }
+
+    fc.innerHTML = html;
+    fc.classList.add('visible');
+  }, 300);
+}
+
+// Auto-play on load
+showScene(0);
+</script>
+</body>
+</html>
